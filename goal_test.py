@@ -4,13 +4,13 @@ from graph import Node
 # the Goal_Test function should be defined statically and be different for each problem
 # and receive different data and return the desired data.
 
-goal_node = None
 
+class GoalTest:
+    def __init__(self, goalNode: Node) -> None:
+        self.goalNode: Node = goalNode
 
-def goal_test(currentNode: Node, goalNode: Node = None):
-    if goal_node == None:
-        goal_node = goalNode
+    def goal_test(self, currentNode: Node):
 
-    if currentNode == goal_node:
-        return [goal_node, True]
-    return [goal_node, False]
+        if currentNode == self.goalNode:
+            return [self.goalNode, True]
+        return [self.goalNode, False]
