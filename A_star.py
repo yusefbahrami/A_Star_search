@@ -3,9 +3,12 @@ from graph import Node
 
 
 class AStar:
-    def __init__(self, start_state: Node, goal_state: Node, heuristic: callable) -> None:
+    def __init__(self, start_state: Node, goalTest: callable, heuristic: callable) -> None:
         self.start_state: Node = start_state
-        self.goal_state: Node = goal_state
+        self.last_state: Node = start_state
+
+        # goalTest will return: [GOAL_STATE, boolean]
+        self.goalTest: callable = goalTest
         self.explored = set()
         self.heap: list[Node] = [start_state]
         self.heuristic: callable = heuristic
@@ -14,14 +17,17 @@ class AStar:
         while self.heap:
             current: Node = heappop(self.heap)
             self.explored.add(current)
+            self.last_state = current
 
-            if current == self.goal_state:
+            tempGoal = self.goalTest(current)
+
+            if tempGoal[1]:
                 break
 
             for edge in current.branches:
                 child: Node = edge.target
                 temp_g = current.g + edge.weight
-                temp_f = temp_g + self.heuristic(current, self.goal_state)
+                temp_f = temp_g + self.heuristic(current, tempGoal[0])
 
                 if child in self.explored and temp_f >= child.f:
                     continue
@@ -38,7 +44,7 @@ class AStar:
 
     def show_solution(self):
         solution: list[Node] = []
-        node: Node = self.goal_state
+        node: Node = self.last_state
         while node:
             solution.append(node)
             node = node.parent
