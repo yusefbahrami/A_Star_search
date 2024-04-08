@@ -1,6 +1,8 @@
 from A_star import AStar
 from graph import Edge, Node
 from heuristic_function import heuristic
+from goal_test import GoalTest
+
 
 if __name__ == '__main__':
     n1 = Node("A", (0, 0))
@@ -27,6 +29,8 @@ if __name__ == '__main__':
 
     n7.add_branch(Edge(n6, 10))
 
-    algorithm = AStar(n1, n6, heuristic)
+    goalTestObject = GoalTest(n6)
+
+    algorithm = AStar(n1, goalTestObject.goal_test, heuristic)
     algorithm.run()
     algorithm.show_solution()
